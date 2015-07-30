@@ -1,0 +1,10 @@
+expose a simple webserver with a form to:
+
+collect the place to save the file
+
+a status indicator
+
+a way to cleanly stop the recording
+
+and manage the ffmpeg process underneath
+
