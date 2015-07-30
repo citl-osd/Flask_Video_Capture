@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<head>
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}"/>
+<title>Capture Video To....</title>
+</head>
+
+<body>
+<h1>Where would you like to save your captured video?</h1>
+<ul>
+{% for dir in dirs %}
+<li><a href="/saveto/{{ dir.replace(':','') }}">{{ dir }}</a></li>
+{% endfor %}
+</ul>
+<form>
+<input type="text" id="filename"></input>
+<input type="button" onclick="window.location=window.location + '/' + filename.value" value="SAVE AS..."></input>
+</body>
+
