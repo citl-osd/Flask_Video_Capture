@@ -1,8 +1,9 @@
-<!DOCTYPE HTML>
-<head>
-<title>Recording {{ filename[0] + ':' + filename[1:] }}</title>
-</head>
-<body>
-<h1>Press button to begin recording {{ filename[0] + ':' + filename[1:] }}</h1>
-<button onclick="window.location = '/start'">Begin Capture!</button>
-</body>
+{% extends "layout.html" %}
+{% block title %}
+Capture Video To....
+{% endblock %}
+
+{% block body %}
+<h2>Press button to begin recording {{ filename[0] + ':' + filename[1:] }}</h2>
+<input type="button" onclick="window.location = '/start'" class="btn btn-success" value="Begin Capture!"></input>
+{% endblock %}

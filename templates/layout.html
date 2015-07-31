@@ -1,0 +1,21 @@
+<!doctype html>
+<head>
+<title>
+{% block title %}
+{% endblock %}
+</title>
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}"/>
+<link rel="stylesheet" href="{{ url_for('static',filename='bootstrap.css') }}" />
+</head>
+<body>
+<div class="container">
+<div class="jumbotron">
+<h1>VIDEO RECORDER</h1>
+</div>
+</div>
+<div class="container">
+{% block body %}
+{% endblock %}
+</div>
+</body>
+</html>

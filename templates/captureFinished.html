@@ -1,5 +1,10 @@
-<!DOCTYPE HTML>
-<body>
-<h1>CAPTURE FINISHED</h1>
-<h2>Your file is saved to {{ output }}<h2>
-</body>
+{% extends "layout.html" %}
+{% block title %}
+Capture Complete!
+{% endblock %}
+
+{% block body %}
+<h2>CAPTURE FINISHED</h2>
+<h3>Your file has been saved to {{ output }}<h3>
+<a href="/">Click here to start over!</a>
+{% endblock %}

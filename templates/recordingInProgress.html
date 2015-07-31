@@ -1,8 +1,9 @@
-<!DOCTYPE HTML>
-<head>
-RECORDING IN PROGRESS!
-</head>
-<body>
-<h1>Recording to {{ output }} </h1>
-<a href="/stop">CLICK HERE TO STOP RECORDING</a>
-</body>
+{% extends "layout.html" %}
+{% block title %}
+Video is capturing!
+{% endblock %}
+
+{% block body %}
+<h2>Recording to {{ output }} </h2>
+<input type="button" style="btn btn-warning" value="STOP RECORDING" onclick="window.location='/stop'"></input>
+{% endblock %}

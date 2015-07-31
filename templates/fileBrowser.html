@@ -1,18 +1,58 @@
-<!DOCTYPE HTML>
-<head>
-<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}"/>
-<title>Capture Video To....</title>
-</head>
+{% extends "layout.html" %}
+{% block title %}
+Capture Video To....
+{% endblock %}
 
-<body>
-<h1>Where would you like to save your captured video?</h1>
-<ul>
-{% for dir in dirs %}
-<li><a href="/saveto/{{ dir.replace(':','') }}">{{ dir }}</a></li>
-{% endfor %}
-</ul>
-<form>
+{% block body %}
+<h2>Where would you like to save your captured video?</h2>
+{% if submit %}
 <input type="text" id="filename"></input>
-<input type="button" onclick="window.location=window.location + '/' + filename.value" value="SAVE AS..."></input>
-</body>
+<input type="button" id="submitbutton" disabled onclick="submitForm()" value="SAVE AS..." class="btn btn-primary"></input>
+<script type="text/javascript">
+
+var textbox = document.getElementById('filename');
+textbox.addEventListener("keydown", keyListener);
+textbox.addEventListener("input",validator);
+var subButt = document.getElementById('submitbutton');
+
+var validFilename = false;
+
+function submitForm() {
+
+	window.location=window.location + '/' + textbox.value;
+}
+
+function validator() {
+	if (textbox.value.endsWith('.mp4')) {
+		validFilename = true;
+		subButt.removeAttribute('disabled');
+	}
+	else {
+		validFilename = false;
+		subButt.setAttribute('disabled','');
+	}
+}
+
+function keyListener(evt) {
+	evt = evt || window.event
+	if (evt.keyCode == 13)  {
+		if (validFilename) {
+	        	submitForm();
+		} else {
+			alert('Filename must end with .mp4');
+		}
+	}
+
+
+};
+</script>
+{% endif %}
+<table class="table table-striped">
+<tr><td><a href="/">Home</a></td></tr>
+{% for dir in dirs %}
+<tr><td><a href="/saveto/{{ dir.replace(':','') }}">{{ dir }}</a></td></tr>
+{% endfor %}
+</table>
+
+{% endblock %}
 

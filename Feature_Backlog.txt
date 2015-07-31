@@ -1,7 +1,3 @@
 Test/debug/robustify
 
-Don't send a response to start until the file starts being written
-
-add a "submit" variable to the filebrowser template, disallow saving above a filesystem
-
-Clean up the html
+Provide an estimated disk capacity in filebrowser (not really practical given disk quotas)
