@@ -5,5 +5,8 @@ Video is capturing!
 
 {% block body %}
 <h2>Recording to {{ output }} </h2>
-<input type="button" style="btn btn-warning" value="STOP RECORDING" onclick="window.location='/stop'"></input>
+<input type="button" class="btn btn-danger" value="STOP RECORDING" onclick="window.location='/stop'"></input>
+<br/>
+<h2>Capture Preview (first frame)</h2>
+<img src="static/test.jpg" height="360" width="640" ></img>
 {% endblock %}

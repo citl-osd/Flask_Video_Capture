@@ -10,19 +10,26 @@ roots = ['X:/','Z:/']
 
 class ffmpegClass:
 	def __init__(self):
-		self.command = 'Y:/management/staff/liam/scripts/bin/ffmpeg -y -i X:/A_Watch_Folder/1030Archive_2.mov -vcodec libx264 -preset ultrafast -vb 15m -s 1920X1080 -r 29.97 -acodec libvo_aacenc -ar 48000 -ac 2 -ab 192k '
+		self.command = 'Y:/management/staff/liam/scripts/bin/ffmpeg -y -f decklink -i "Intensity Pro@12" -vcodec libx264 -pix_fmt yuv420p -preset ultrafast -vb 20m -s 1920X1080 -r 29.97 -acodec libvo_aacenc -ar 48000 -ac 2 -ab 192k "'
 		self.outputfile = 'X:/test/ffmpeg/flasktest.mp4'
 
 	def setOutput(self, output):
 		self.outputfile = output
 
 	def startProcess(self):
-		self.pipe = Popen(self.command + self.outputfile,stdin=PIPE, shell=True)
+		self.throwawaypipe = Popen('Y:/management/staff/liam/scripts/bin/ffmpeg -y -f decklink -i "Intensity Pro@12" -s 640x360 -r 1 -vframes 1 static/test.jpg', shell=True)
+		self.throwawaypipe.wait()
+		self.pipe = Popen(self.command + self.outputfile + '"',stdin=PIPE,shell=True)
 		waiting = True
+		counter = 0
 		while waiting:
+			if counter == 20:
+				self.pipe.terminate()
+				return "FAIL"
 			if os.path.exists(self.outputfile):
 				waiting = False
 			else:
+				counter = counter + 1
 				time.sleep(1)
 		return "WE GOT ONE"
 
@@ -40,6 +47,10 @@ def favicon():
 def bootstrap():
 	return send_from_directory('static','bootstrap.css', mimetype='text/css')
 
+@app.route('/test.jpg')
+def previewImage():
+	return send_from_directory('static','test.jpg', mimetype='image/jpeg')
+
 @app.route("/")
 def root():
 	return render_template('fileBrowser.html', dirs=roots, submit=False)
@@ -54,6 +65,8 @@ def stop():
 @app.route('/start')
 def start():
 	ready = ffmpegProcess.startProcess()
+	if ready == 'FAIL':
+		return "SOMETHING WENT VERY WRONG!"
 	return render_template('recordingInProgress.html',output=ffmpegProcess.outputfile)
 
 @app.route('/saveto/<path:path>')
@@ -89,7 +102,9 @@ def saveto(path):
 		return render_template('fileBrowser.html',dirs=dirs, curdir='Z:/' + path[2:], submit=True)
 	elif path.endswith('.mp4') and (path.startswith('Z/') or path.startswith('X/')):
 		if os.path.exists(path[0] + ':' + path[1:]):
-			return 'FILE ALREADY EXISTS'
+			return 'FILE ALREADY EXISTS!'
+		elif not os.path.exists(path[0] + ':' + '/'.join(path[2:].split('/')[:-1])):
+			return 'PARENT DIRECTORY DOES NOT EXIST!'
 		else:
 			ffmpegProcess.setOutput(path[0] + ':' + path[1:])
 			return render_template('startRecording.html', filename=path)
