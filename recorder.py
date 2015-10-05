@@ -18,7 +18,7 @@ class ffmpegClass:
 		self.outputfile = output
 
 	def setLastDir(self, path):
-		self.lastDir = path
+		self.lastDir = '/'.join(path.split('/')[:-1])
 
 	def startProcess(self):
 		self.pipe = Popen(self.command + self.outputfile + '"',stdin=PIPE,shell=True)
@@ -116,4 +116,4 @@ def bareSaveto():
 
 
 if __name__ == "__main__":
-	app.run(debug=True)
+	app.run()
