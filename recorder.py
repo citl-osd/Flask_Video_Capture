@@ -35,6 +35,7 @@ class ffmpegClass:
 
 	def stopProcess(self):
 		code= self.pipe.communicate('q')
+		os.remove('static/test.jpg')
 		return code
 
 ffmpegProcess = ffmpegClass()
@@ -117,4 +118,4 @@ def bareSaveto():
 
 
 if __name__ == "__main__":
-	app.run()
+	app.run(debug=True)

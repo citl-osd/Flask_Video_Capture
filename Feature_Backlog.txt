@@ -1,5 +1,3 @@
-Fix bug with image caching
+Replace image caching with a timecode
 
-Test/debug/robustify
-
-Provide an estimated disk capacity in filebrowser (not really practical given disk quotas)
+"Last Folder" button
