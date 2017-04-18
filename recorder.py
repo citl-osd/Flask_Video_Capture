@@ -8,16 +8,18 @@ from subprocess import Popen, PIPE
 app = Flask(__name__)
 roots = ['X:/','Z:/']
 
+FFMpeg = 'Y:/management/staff/liam/scripts/bin/ffmpeg '
+
 class ffmpegClass:
 	def __init__(self):
-		self.command = 'Y:/management/staff/liam/scripts/bin/ffmpeg -y -f decklink -i "Intensity Pro@12" -vcodec libx264 -pix_fmt yuv420p -preset ultrafast -vb 20m -s 1920X1080 -r 29.97 -acodec libvo_aacenc -ar 48000 -ac 2 -ab 192k "'
+		self.command = FFMpeg + '-y -f decklink -i "Intensity Pro@12" -vcodec libx264 -pix_fmt yuv420p -preset ultrafast -vb 20m -s 1920X1080 -r 29.97 -acodec libvo_aacenc -ar 48000 -ac 2 -ab 192k "'
 		self.outputfile = 'X:/test/ffmpeg/flasktest.mp4'
 
 	def setOutput(self, output):
 		self.outputfile = output
 
 	def startProcess(self):
-		self.throwawaypipe = Popen('Y:/management/staff/liam/scripts/bin/ffmpeg -y -f decklink -i "Intensity Pro@12" -s 640x360 -r 1 -vframes 1 static/test.jpg', shell=True)
+		self.throwawaypipe = Popen(FFMpeg + '-y -f decklink -i "Intensity Pro@12" -s 640x360 -r 1 -vframes 1 static/test.jpg', shell=True)
 		self.throwawaypipe.wait()
 		self.pipe = Popen(self.command + self.outputfile + '"',stdin=PIPE,shell=True)
 		waiting = True
@@ -35,6 +37,7 @@ class ffmpegClass:
 
 	def stopProcess(self):
 		code= self.pipe.communicate('q')
+		os.remove('static/test.jpg')
 		return code
 
 ffmpegProcess = ffmpegClass()
@@ -117,4 +120,4 @@ def bareSaveto():
 
 
 if __name__ == "__main__":
-	app.run()
+	app.run(debug=True)
