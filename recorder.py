@@ -14,9 +14,13 @@ class ffmpegClass:
 	def __init__(self):
 		self.command = FFMpeg + '-y -f decklink -i "Intensity Pro@12" -vcodec libx264 -pix_fmt yuv420p -preset ultrafast -vb 20m -s 1920X1080 -r 29.97 -acodec libvo_aacenc -ar 48000 -ac 2 -ab 192k "'
 		self.outputfile = 'X:/test/ffmpeg/flasktest.mp4'
+		self.lastDir = 'X/test/ffmpeg'
 
 	def setOutput(self, output):
 		self.outputfile = output
+
+	def setLastDir(self, path):
+		self.lastDir = '/'.join(path.split('/')[:-1])
 
 	def startProcess(self):
 		self.throwawaypipe = Popen(FFMpeg + '-y -f decklink -i "Intensity Pro@12" -s 640x360 -r 1 -vframes 1 static/test.jpg', shell=True)
@@ -25,14 +29,14 @@ class ffmpegClass:
 		waiting = True
 		counter = 0
 		while waiting:
-			if counter == 20:
+			if counter == 40:
 				self.pipe.terminate()
 				return "FAIL"
 			if os.path.exists(self.outputfile):
 				waiting = False
 			else:
 				counter = counter + 1
-				time.sleep(1)
+				time.sleep(0.5)
 		return "WE GOT ONE"
 
 	def stopProcess(self):
@@ -50,10 +54,6 @@ def favicon():
 def bootstrap():
 	return send_from_directory('static','bootstrap.css', mimetype='text/css')
 
-@app.route('/test.jpg')
-def previewImage():
-	return send_from_directory('static','test.jpg', mimetype='image/jpeg')
-
 @app.route("/")
 def root():
 	return render_template('fileBrowser.html', dirs=roots, submit=False)
@@ -62,7 +62,7 @@ def root():
 @app.route('/stop')
 def stop():
 	code = ffmpegProcess.stopProcess()
-	return render_template('captureFinished.html', output=ffmpegProcess.outputfile)
+	return render_template('captureFinished.html', output=ffmpegProcess.outputfile, dirs = ffmpegProcess.lastDir)
 
 
 @app.route('/start')
@@ -110,6 +110,7 @@ def saveto(path):
 			return 'PARENT DIRECTORY DOES NOT EXIST!'
 		else:
 			ffmpegProcess.setOutput(path[0] + ':' + path[1:])
+			ffmpegProcess.setLastDir(path)
 			return render_template('startRecording.html', filename=path)
 	else:
 		return('What tomfoolery is this?')

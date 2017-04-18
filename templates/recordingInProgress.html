@@ -7,6 +7,35 @@ Video is capturing!
 <h2>Recording to {{ output }} </h2>
 <input type="button" class="btn btn-danger" value="STOP RECORDING" onclick="window.location='/stop'"></input>
 <br/>
-<h2>Capture Preview (first frame)</h2>
-<img src="static/test.jpg" height="360" width="640" ></img>
+<h2>Timecode</h2>
+<h3 id="timecode"></h3>
+
+<script type="text/javascript">
+
+var timecode = document.querySelector('#timecode');
+
+var runtime = 0;
+
+function updateTimecode() {
+	runtime = runtime + 1;
+	var 	seconds = String(Math.floor( (runtime) %60)),
+		minutes = String(Math.floor(runtime/60) % 60),
+		hours = String(Math.floor( (runtime/(60*60) ) % 60));
+	if (seconds.length == 1) {
+		seconds = '0' + seconds;
+	}
+	if (minutes.length == 1) {
+		minutes = '0' + minutes;
+	}
+	if (hours.length == 1) {
+		hours = '0' + hours;
+	}
+		
+	timecode.innerHTML = hours + ':' + minutes + ':' + seconds;
+}
+
+setInterval(updateTimecode, 1000);
+
+
+</script>
 {% endblock %}
